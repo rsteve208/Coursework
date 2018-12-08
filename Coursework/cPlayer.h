@@ -5,18 +5,18 @@ cRocket.h
 - Header file for the Rocket class which is a child of cSprite class
 =================
 */
-#ifndef _CROCKET_H
-#define _CROCKET_H
+#ifndef _CPLAYER_H
+#define _CPLAYER_H
 #include "cSprite.h"
 
-class cRocket : public cSprite
+class cPlayer : public cSprite
 {
 private:
 	int rocketVelocity;
 	int move;
 
 public:
-	cRocket();
+	cPlayer();
 	void update(double deltaTime);		// Rocket update method
 	void setRocketVelocity(int rocketVel);   // Sets the velocity for the rocket
 	int getRocketVelocity();				 // Gets the rocket velocity

@@ -9,7 +9,7 @@
 #include "cTexture.h"
 #include "cAsteroid.h"
 #include "cBullet.h"
-#include "cRocket.h"
+#include "cPlayer.h"
 #include "cFontMgr.h"
 #include "cSoundMgr.h"
 

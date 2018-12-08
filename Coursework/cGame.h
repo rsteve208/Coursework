@@ -42,9 +42,12 @@ private:
 
 	// Sprites for displaying background and rocket textures
 	cSprite spriteBkgd;
-	cRocket theRocket;
+	cPlayer thePlayer;
 	cAsteroid theAsteroid;
 	cBullet theBullet;
+	cSprite theWall;
+	cSprite theWallTwo;
+	cSprite theWallThree;
 	// game related variables
 	vector<LPCSTR> textureName;
 	vector<LPCSTR> textName;
@@ -66,6 +69,8 @@ private:
 	int renderWidth, renderHeight;
 	int theScore;
 	string strScore;
+
+	bool spaceHeldDown = false;
 };
 
 #endif

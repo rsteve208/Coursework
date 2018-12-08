@@ -43,12 +43,10 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	// Clear the buffer with a black background
 	SDL_SetRenderDrawColor(theRenderer, 0, 0, 0, 255);
 	SDL_RenderPresent(theRenderer);
-	
+
 	/* Let the computer pick a random number */
 	random_device rd;    // non-deterministic engine 
 	mt19937 gen{ rd() }; // deterministic engine. For most common uses, std::mersenne_twister_engine, fast and high-quality.
-	uniform_int_distribution<> AsteroidDis{ 1, 5 };
-	uniform_int_distribution<> AsteroidTextDis{ 0, 4 };
 
 	theTextureMgr->setRenderer(theRenderer);
 	theFontMgr->initFontLib();
@@ -56,10 +54,10 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theScore = 0;
 
 	// Store the textures
-	textureName = { "asteroid1", "asteroid2", "asteroid3", "asteroid4", "photon","theRocket","theBackground", "explosion"};
-	texturesToUse = { "Images\\Sprites\\asteroid1.png", "Images\\Sprites\\asteroid2.png", "Images\\Sprites\\asteroid3.png", "Images\\Sprites\\asteroid4.png", "Images\\Sprites\\Photon64x32.png", "Images\\Sprites\\rocketSprite.png", "Images\\Bkg\\starscape1024x768.png", "Images\\Sprites\\explosion.png" };
+	textureName = { "theWall", "thePlayer", "playerAlt", "theBackground", "catRocket", "wallTwo", "wallThree" };
+	texturesToUse = { "Images\\Sprites\\wall.png", "Images\\Sprites\\cat.png", "Images\\Sprites\\cat2.png", "Images\\Bkg\\background.png", "Images\\Sprites\\catRocket.png", "Images\\Sprites\\wall.png", "Images\\Sprites\\wall.png" };
 	for (int tCount = 0; tCount < (int)textureName.size(); tCount++)
-	{	
+	{
 		theTextureMgr->addTexture(textureName[tCount], texturesToUse[tCount]);
 	}
 	// Create textures for Game Dialogue (text)
@@ -69,12 +67,13 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	{
 		theFontMgr->addFont(fontList[fonts], fontsToUse[fonts], 36);
 	}
-	gameTextList = { "Asteroids", "Score : "};
+	gameTextList = { "Cat", "Score : ", "Instructions: Use the spacebar to blast through the walls and earn points!" };
 	strScore = gameTextList[1];
 	strScore += to_string(theScore).c_str();
-	
+
 	theTextureMgr->addTexture("Title", theFontMgr->getFont("spaceAge")->createTextTexture(theRenderer, gameTextList[0], textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 	theTextureMgr->addTexture("theScore", theFontMgr->getFont("spaceAge")->createTextTexture(theRenderer, strScore.c_str(), textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+	theTextureMgr->addTexture("instructions", theFontMgr->getFont("spaceAge")->createTextTexture(theRenderer, gameTextList[2], textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 
 	// Load game sounds
 	soundList = { "theme", "shot", "explosion" };
@@ -91,26 +90,24 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	spriteBkgd.setTexture(theTextureMgr->getTexture("theBackground"));
 	spriteBkgd.setSpriteDimensions(theTextureMgr->getTexture("theBackground")->getTWidth(), theTextureMgr->getTexture("theBackground")->getTHeight());
 
-	theRocket.setSpritePos({ 500, 350 });
-	theRocket.setTexture(theTextureMgr->getTexture("theRocket"));
-	theRocket.setSpriteDimensions(theTextureMgr->getTexture("theRocket")->getTWidth(), theTextureMgr->getTexture("theRocket")->getTHeight());
-	theRocket.setRocketVelocity(100);
-	theRocket.setSpriteTranslation({ 50,50 });
+	thePlayer.setSpritePos({ 105, 530 });
+	thePlayer.setTexture(theTextureMgr->getTexture("thePlayer"));
+	thePlayer.setSpriteDimensions(theTextureMgr->getTexture("thePlayer")->getTWidth(), theTextureMgr->getTexture("thePlayer")->getTHeight());
+	thePlayer.setSpriteTranslation({ 50,50 });
 
+	theWall.setSpritePos({ 600, 497 });
+	theWall.setTexture(theTextureMgr->getTexture("theWall"));
+	theWall.setSpriteDimensions(theTextureMgr->getTexture("theWall")->getTWidth(), theTextureMgr->getTexture("theWall")->getTHeight());
+
+	theWallTwo.setSpritePos({ 700, 497 });
+	theWallTwo.setTexture(theTextureMgr->getTexture("wallTwo"));
+	theWallTwo.setSpriteDimensions(theTextureMgr->getTexture("wallTwo")->getTWidth(), theTextureMgr->getTexture("wallTwo")->getTHeight());
+
+	theWallThree.setSpritePos({ 600, 497 });
+	theWallThree.setTexture(theTextureMgr->getTexture("wallThree"));
+	theWallThree.setSpriteDimensions(theTextureMgr->getTexture("wallThree")->getTWidth(), theTextureMgr->getTexture("wallThree")->getTHeight());
 
 	// Create vector array of textures
-
-	for (int astro = 0; astro < 5; astro++)
-	{
-		theAsteroids.push_back(new cAsteroid);
-		theAsteroids[astro]->setSpritePos({ 100 * AsteroidDis(gen), 50 * AsteroidDis(gen) });
-		theAsteroids[astro]->setSpriteTranslation({ 100, -50 });
-		int randAsteroid = AsteroidTextDis(gen);
-		theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
-		theAsteroids[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
-		theAsteroids[astro]->setAsteroidVelocity(200);
-		theAsteroids[astro]->setActive(true);
-	}
 
 }
 
@@ -133,32 +130,31 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {
 	SDL_RenderClear(theRenderer);
 	spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
-	// Render each asteroid in the vector array
-	for (int draw = 0; draw < (int)theAsteroids.size(); draw++)
-	{
-		theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
-	}
-	// Render each bullet in the vector array
-	for (int draw = 0; draw < (int)theBullets.size(); draw++)
-	{
-		theBullets[draw]->render(theRenderer, &theBullets[draw]->getSpriteDimensions(), &theBullets[draw]->getSpritePos(), theBullets[draw]->getSpriteRotAngle(), &theBullets[draw]->getSpriteCentre(), theBullets[draw]->getSpriteScale());
-	}
-	// Render each explosion in the vector array
-	for (int draw = 0; draw < (int)theExplosions.size(); draw++)
-	{
-		theExplosions[draw]->render(theRenderer, &theExplosions[draw]->getSourceRect(), &theExplosions[draw]->getSpritePos(), theExplosions[draw]->getSpriteScale());
-	}
+	
 	// Render the Title
 	cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
 	SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 	FPoint scale = { 1, 1 };
 	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
 	// Render updated score value
-	
-	// Lab 7 code goes here
-	
-	// render the rocket
-	theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
+	tempTextTexture = theTextureMgr->getTexture("theScore");
+	pos = { 750, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+	scale = { 1, 1 };
+	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
+	// Render the instructions
+	tempTextTexture = theTextureMgr->getTexture("instructions");
+	pos = { 500, 700, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+	scale = { 1, 1 };
+	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
+	// render the player and walls
+	thePlayer.render(theRenderer, &thePlayer.getSpriteDimensions(), &thePlayer.getSpritePos(), thePlayer.getSpriteRotAngle(), &thePlayer.getSpriteCentre(), thePlayer.getSpriteScale());
+	theWall.render(theRenderer, &theWall.getSpriteDimensions(), &theWall.getSpritePos(), theWall.getSpriteRotAngle(), &theWall.getSpriteCentre(), theWall.getSpriteScale());
+	theWallTwo.render(theRenderer, &theWallTwo.getSpriteDimensions(), &theWallTwo.getSpritePos(), theWallTwo.getSpriteRotAngle(), &theWallTwo.getSpriteCentre(), theWallTwo.getSpriteScale());
+	theWallThree.render(theRenderer, &theWallThree.getSpriteDimensions(), &theWallThree.getSpritePos(), theWallThree.getSpriteRotAngle(), &theWallThree.getSpriteCentre(), theWallThree.getSpriteScale());
+
 	SDL_RenderPresent(theRenderer);
 }
 
@@ -174,85 +170,70 @@ void cGame::update()
 }
 
 void cGame::update(double deltaTime)
-{
-	// Update the visibility and position of each asteriod
-	vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin();
-	while (asteroidIterator != theAsteroids.end())
+{	
+	
+
+	SDL_Point wallPos = { theWall.getSpritePos().x, theWall.getSpritePos().y };
+	wallPos.x -= 3;
+	theWall.setSpritePos(wallPos);
+	if (theWall.getSpritePos().x < -31)
 	{
-		if ((*asteroidIterator)->isActive() == false)
-		{
-			asteroidIterator = theAsteroids.erase(asteroidIterator);
-		}
-		else
-		{
-			(*asteroidIterator)->update(deltaTime);
-			++asteroidIterator;
-		}
-	}
-	// Update the visibility and position of each bullet
-	vector<cBullet*>::iterator bulletIterartor = theBullets.begin();
-	while (bulletIterartor != theBullets.end())
-	{
-		if ((*bulletIterartor)->isActive() == false)
-		{
-			bulletIterartor = theBullets.erase(bulletIterartor);
-		}
-		else
-		{
-			(*bulletIterartor)->update(deltaTime);
-			++bulletIterartor;
-		}
-	}
-	// Update the visibility and position of each explosion
-	vector<cSprite*>::iterator expIterartor = theExplosions.begin();
-	while (expIterartor != theExplosions.end())
-	{
-		if ((*expIterartor)->isActive() == false)
-		{
-			expIterartor = theExplosions.erase(expIterartor);
-		}
-		else
-		{
-			(*expIterartor)->animate(deltaTime);
-			++expIterartor;
-		}
+		 wallPos = { theWall.getSpritePos().x, theWall.getSpritePos().y };
+		 wallPos.x = WINDOW_WIDTH;
+		 theWall.setSpritePos(wallPos);
 	}
 
-	/*
-	==============================================================
-	| Check for collisions
-	==============================================================
-	*/
-	for (vector<cBullet*>::iterator bulletIterartor = theBullets.begin(); bulletIterartor != theBullets.end(); ++bulletIterartor)
+	SDL_Point wallPosTwo = { theWallTwo.getSpritePos().x, theWallTwo.getSpritePos().y };
+	wallPosTwo.x -= 1;
+	theWallTwo.setSpritePos(wallPosTwo);
+	if (theWallTwo.getSpritePos().x < -31)
 	{
-		//(*bulletIterartor)->update(deltaTime);
-		for (vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin(); asteroidIterator != theAsteroids.end(); ++asteroidIterator)
-		{
-			if ((*asteroidIterator)->collidedWith(&(*asteroidIterator)->getBoundingRect(), &(*bulletIterartor)->getBoundingRect()))
-			{
-				// if a collision set the bullet and asteroid to false
-				(*asteroidIterator)->setActive(false);
-				(*bulletIterartor)->setActive(false);
-				theExplosions.push_back(new cSprite);
-				int index = theExplosions.size()-1;
-				theExplosions[index]->setSpriteTranslation({ 0, 0 });
-				theExplosions[index]->setActive(true);
-				theExplosions[index]->setNoFrames(16);
-				theExplosions[index]->setTexture(theTextureMgr->getTexture("explosion"));
-				theExplosions[index]->setSpriteDimensions(theTextureMgr->getTexture("explosion")->getTWidth()/ theExplosions[index]->getNoFrames(), theTextureMgr->getTexture("explosion")->getTHeight());
-				theExplosions[index]->setSpritePos({ (*asteroidIterator)->getSpritePos().x + (int)((*asteroidIterator)->getSpritePos().w/2), (*asteroidIterator)->getSpritePos().y + (int)((*asteroidIterator)->getSpritePos().h / 2) });
+		wallPosTwo = { theWallTwo.getSpritePos().x, theWallTwo.getSpritePos().y };
+		wallPosTwo.x = WINDOW_WIDTH;
+		theWallTwo.setSpritePos(wallPosTwo);
+	}
 
-				theSoundMgr->getSnd("explosion")->play(0);
-				
-				// Lab 7 code goes here
-				
-			}
+	SDL_Point wallPosThree = { theWallThree.getSpritePos().x, theWallThree.getSpritePos().y };
+	wallPosThree.x -= 2;
+	theWallThree.setSpritePos(wallPosThree);
+	if (theWallThree.getSpritePos().x < -31)
+	{
+		wallPosThree = { theWallThree.getSpritePos().x, theWallThree.getSpritePos().y };
+		wallPosThree.x = WINDOW_WIDTH;
+		theWallThree.setSpritePos(wallPosThree);
+	}
+
+	//cout << spaceHeldDown << endl;
+	SDL_Point playerPos = { thePlayer.getSpritePos().x, thePlayer.getSpritePos().y };
+
+	if (spaceHeldDown) {
+		thePlayer.setTexture(theTextureMgr->getTexture("catRocket"));
+		if (playerPos.x < (WINDOW_WIDTH - 100))
+		{
+			playerPos.x += 4;
+			thePlayer.setSpritePos(playerPos);
 		}
+	
+	}
+	else {
+
+		thePlayer.setTexture(theTextureMgr->getTexture("thePlayer"));
+		
+		if (playerPos.x > 100)
+		{
+			playerPos.x -= 5;
+			thePlayer.setSpritePos(playerPos);
+		}
+		
+		
+		
 	}
 
 
-	// Update the Rockets position
-	theRocket.update(deltaTime);
+
+
+	// Update the player's position
+	thePlayer.update(deltaTime);
 }
 
 bool cGame::getInput(bool theLoop)
@@ -268,6 +249,7 @@ bool cGame::getInput(bool theLoop)
 
 		switch (event.type)
 		{
+			/*
 			case SDL_MOUSEBUTTONDOWN:
 				switch (event.button.button)
 				{
@@ -294,62 +276,52 @@ bool cGame::getInput(bool theLoop)
 					break;
 				}
 				break;
-			case SDL_MOUSEMOTION:
-			break;
+			*/
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym)
 				{
-				case SDLK_ESCAPE:
-					theLoop = false;
-					break;
-				case SDLK_DOWN:
-				{
-					theRocket.setRocketMove(1);
-				}
-				break;
+					/*case SDLK_ESCAPE:
+						theLoop = false;
+						break;*/
 
-				case SDLK_UP:
-				{
-					theRocket.setRocketMove(-1);
-				}
-				break;
-				case SDLK_RIGHT:
-				{
-					theRocket.setSpriteRotAngle(theRocket.getSpriteRotAngle() +5);
-				}
-				break;
-
-				case SDLK_LEFT:
-				{
-					theRocket.setSpriteRotAngle(theRocket.getSpriteRotAngle() - 5);
-				}
-				break;
 				case SDLK_SPACE:
-				{
-					theBullets.push_back(new cBullet);
-					int numBullets = theBullets.size() - 1;
-					theBullets[numBullets]->setSpritePos({ theRocket.getBoundingRect().x + theRocket.getSpriteCentre().x, theRocket.getBoundingRect().y + theRocket.getSpriteCentre().y });
-					theBullets[numBullets]->setSpriteTranslation({ 50, 50 });
-					theBullets[numBullets]->setTexture(theTextureMgr->getTexture("photon"));
-					theBullets[numBullets]->setSpriteDimensions(theTextureMgr->getTexture("photon")->getTWidth(), theTextureMgr->getTexture("photon")->getTHeight());
-					theBullets[numBullets]->setBulletVelocity(50);
-					theBullets[numBullets]->setSpriteRotAngle(theRocket.getSpriteRotAngle());
-					theBullets[numBullets]->setActive(true);
-					cout << "Bullet added to Vector at position - x: " << theRocket.getBoundingRect().x << " y: " << theRocket.getBoundingRect().y << endl;
-				}
-				theSoundMgr->getSnd("shot")->play(0);
-				break;
-				default:
+					cout << "space down" << endl;
+					spaceHeldDown = true;
+					/*
+					thePlayer.setTexture(theTextureMgr->getTexture("catRocket"));
+					cout << "down" << endl;
+					theSoundMgr->getSnd("shot")->play(0);*/
 					break;
+
+
+					default:
+						break;
+					}
+
+				break;
+
+			case SDL_KEYUP:
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_SPACE:
+						spaceHeldDown = false;
+						cout << "space up" << endl;
+						//xcout << "up" << endl;
+						break;
+
+					default:
+						break;
 				}
 
-			default:
 				break;
+			
 		}
 
 	}
 	return theLoop;
 }
+
+
 
 double cGame::getElapsedSeconds()
 {
