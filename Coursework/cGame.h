@@ -10,7 +10,7 @@ cGame.h
 #include <SDL.h>
 #include <random>
 // Game specific includes
-#include "asteroidsGame.h"
+#include "angryCatGame.h"
 
 
 using namespace std;
@@ -43,7 +43,7 @@ private:
 	// Sprites for displaying background and rocket textures
 	cSprite spriteBkgd;
 	cPlayer thePlayer;
-	cAsteroid theAsteroid;
+	cAngryCat theAsteroid;
 	cBullet theBullet;
 	cSprite theWall;
 	cSprite theWallTwo;
@@ -52,7 +52,7 @@ private:
 	vector<LPCSTR> textureName;
 	vector<LPCSTR> textName;
 	vector<LPCSTR> texturesToUse;
-	vector<cAsteroid*> theAsteroids;
+	vector<cAngryCat*> theAsteroids;
 	vector<cBullet*> theBullets;
 	vector<cSprite*> theExplosions;
 	// Fonts to use

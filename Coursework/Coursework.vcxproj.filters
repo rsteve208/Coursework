@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="asteroidsGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cAsteroid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cBkGround.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -60,12 +54,15 @@
     <ClInclude Include="cPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="angryCatGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cAngryCat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsteroidsSDL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cAsteroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cBkGround.cpp">
@@ -102,6 +99,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cAngryCat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

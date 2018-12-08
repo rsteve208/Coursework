@@ -76,9 +76,9 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTextureMgr->addTexture("instructions", theFontMgr->getFont("spaceAge")->createTextTexture(theRenderer, gameTextList[2], textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 
 	// Load game sounds
-	soundList = { "theme", "shot", "explosion" };
+	soundList = { "theme", "rocket", "explosion" };
 	soundTypes = { soundType::music, soundType::sfx, soundType::sfx };
-	soundsToUse = { "Audio/who10Edit.wav", "Audio/shot007.wav", "Audio/explosion2.wav" };
+	soundsToUse = { "Audio/ispeakwaves__upbeat-funky-loop-electronic.mp3", "Audio/mattix__jet-swoosh-02.wav", "Audio/alancat__rockfall1b-edit.wav" };
 	for (int sounds = 0; sounds < (int)soundList.size(); sounds++)
 	{
 		theSoundMgr->add(soundList[sounds], soundsToUse[sounds], soundTypes[sounds]);
@@ -289,8 +289,8 @@ bool cGame::getInput(bool theLoop)
 					spaceHeldDown = true;
 					/*
 					thePlayer.setTexture(theTextureMgr->getTexture("catRocket"));
-					cout << "down" << endl;
-					theSoundMgr->getSnd("shot")->play(0);*/
+					cout << "down" << endl;*/
+					theSoundMgr->getSnd("rocket")->play(0);
 					break;
 
 
@@ -317,8 +317,11 @@ bool cGame::getInput(bool theLoop)
 			
 		}
 
+		
 	}
 	return theLoop;
+
+	
 }
 
 
