@@ -35,7 +35,7 @@ void cPlayer::update(double deltaTime)
 	currentSpritePos.y -= (int)(this->rocketVelocity * direction.Y * this->move * deltaTime);
 
 	this->setSpritePos({ currentSpritePos.x , currentSpritePos.y  });
-	this->setBoundingRect(this->getSpritePos());
+	this->setBoundingRect();
 
 }
 /*

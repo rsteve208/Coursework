@@ -218,7 +218,7 @@ void cSprite::setSpriteRotAngle(float angle)  // set the sprites current scaling
 =================
 */
 
-void cSprite::setBoundingRect(SDL_Rect pRect)
+void cSprite::setBoundingRect()
 {
 	SDL_Point sPos = { this->getSpritePos().x, this->getSpritePos().y };
 	this->boundingRect = { sPos.x, sPos.y, this->getSpritePos().w, this->getSpritePos().h }; //(pRect, sPos.x - m_Radius, sPos.y - m_Radius, (textureWidth / 2 + sPos.x), (textureHeight / 2 + sPos.y));

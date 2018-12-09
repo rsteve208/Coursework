@@ -35,7 +35,7 @@ void cAngryCat::update(double deltaTime)
 	currentSpritePos.y -= (int)(this->getSpriteTranslation().y * deltaTime);
 
 	this->setSpritePos({ currentSpritePos.x, currentSpritePos.y });
-	this->setBoundingRect(this->getSpritePos());
+	this->setBoundingRect();
 }
 /*
 =================================================================

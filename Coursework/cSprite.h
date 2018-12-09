@@ -59,7 +59,7 @@ public:
 	void scaleSprite(); // update the sprites width & height
 	float getSpriteRotAngle();  // Return the sprites rotation angle
 	void setSpriteRotAngle(float angle); // set the sprites rotation angle
-	void setBoundingRect(SDL_Rect pRect);		// Determine the bounding rectangle for the sprite
+	void setBoundingRect();		// Determine the bounding rectangle for the sprite
 	SDL_Rect getBoundingRect();		// Get the bounding rectangle for the sprite
 	void setActive(bool sActive);			// Set the sprite to active.
 	bool isActive();						// Determine if the sprite is active.
@@ -76,5 +76,6 @@ public:
 	SDL_Rect getSourceRect();
 	void setRate(float theRate);
 	float getRate();
+	bool canCollide; // Turn off/on collisions
 };
 #endif

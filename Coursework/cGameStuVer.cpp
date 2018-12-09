@@ -18,7 +18,7 @@ Constructor
 */
 cGame::cGame()
 {
-
+	
 }
 /*
 =================================================================================
@@ -98,14 +98,17 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theWall.setSpritePos({ 600, 497 });
 	theWall.setTexture(theTextureMgr->getTexture("theWall"));
 	theWall.setSpriteDimensions(theTextureMgr->getTexture("theWall")->getTWidth(), theTextureMgr->getTexture("theWall")->getTHeight());
+	theWall.canCollide = true;
 
 	theWallTwo.setSpritePos({ 700, 497 });
 	theWallTwo.setTexture(theTextureMgr->getTexture("wallTwo"));
 	theWallTwo.setSpriteDimensions(theTextureMgr->getTexture("wallTwo")->getTWidth(), theTextureMgr->getTexture("wallTwo")->getTHeight());
+	theWallTwo.canCollide = true;
 
 	theWallThree.setSpritePos({ 600, 497 });
 	theWallThree.setTexture(theTextureMgr->getTexture("wallThree"));
 	theWallThree.setSpriteDimensions(theTextureMgr->getTexture("wallThree")->getTWidth(), theTextureMgr->getTexture("wallThree")->getTHeight());
+	theWallThree.canCollide = true;
 
 	// Create vector array of textures
 
@@ -151,9 +154,16 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	// render the player and walls
 	thePlayer.render(theRenderer, &thePlayer.getSpriteDimensions(), &thePlayer.getSpritePos(), thePlayer.getSpriteRotAngle(), &thePlayer.getSpriteCentre(), thePlayer.getSpriteScale());
+	thePlayer.setBoundingRect();
+
 	theWall.render(theRenderer, &theWall.getSpriteDimensions(), &theWall.getSpritePos(), theWall.getSpriteRotAngle(), &theWall.getSpriteCentre(), theWall.getSpriteScale());
+	theWall.setBoundingRect();
+
 	theWallTwo.render(theRenderer, &theWallTwo.getSpriteDimensions(), &theWallTwo.getSpritePos(), theWallTwo.getSpriteRotAngle(), &theWallTwo.getSpriteCentre(), theWallTwo.getSpriteScale());
+	theWallTwo.setBoundingRect();
+
 	theWallThree.render(theRenderer, &theWallThree.getSpriteDimensions(), &theWallThree.getSpritePos(), theWallThree.getSpriteRotAngle(), &theWallThree.getSpriteCentre(), theWallThree.getSpriteScale());
+	theWallThree.setBoundingRect();
 
 	SDL_RenderPresent(theRenderer);
 }
@@ -230,6 +240,60 @@ void cGame::update(double deltaTime)
 	}
 
 
+	if (thePlayer.collidedWith(&thePlayer.getBoundingRect(), &theWall.getBoundingRect()) == true)
+	{
+		if (theWall.canCollide)
+		{
+			theWall.canCollide = false;
+			cout << "Collision" << endl;
+			if (spaceHeldDown == true)
+			{
+				theScore++;
+				theSoundMgr->getSnd("explosion")->play(0);
+			}
+			else
+			{
+				cout << "Damage" << endl;
+			}
+		}
+	}
+
+	if (thePlayer.collidedWith(&thePlayer.getBoundingRect(), &theWallTwo.getBoundingRect()))
+	{
+		if (theWallTwo.canCollide)
+		{
+			theWallTwo.canCollide = false;
+			cout << "Collision" << endl;
+			if (spaceHeldDown == true)
+			{
+				theScore++;
+				theSoundMgr->getSnd("explosion")->play(0);
+			}
+			else
+			{
+				cout << "Damage" << endl;
+			}
+		}
+	}
+
+	if (thePlayer.collidedWith(&thePlayer.getBoundingRect(), &theWallThree.getBoundingRect()))
+	{
+		if (theWallThree.canCollide)
+		{
+			theWallThree.canCollide = false;
+			cout << "Collision" << endl;
+			if (spaceHeldDown == true)
+			{
+				cout << "1 point" << endl;
+				theScore++;
+				theSoundMgr->getSnd("explosion")->play(0);
+			}
+			else
+			{
+				cout << "Damage" << endl;
+			}
+		}
+	}
 
 
 	// Update the player's position
@@ -290,6 +354,7 @@ bool cGame::getInput(bool theLoop)
 					/*
 					thePlayer.setTexture(theTextureMgr->getTexture("catRocket"));
 					cout << "down" << endl;*/
+					cout << "sound played" << endl;
 					theSoundMgr->getSnd("rocket")->play(0);
 					break;
 
