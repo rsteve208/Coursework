@@ -70,7 +70,9 @@ private:
 	int theScore;
 	string strScore;
 
+	bool updateScore = false;
 	bool spaceHeldDown = false;
+	bool updateLives = false;
 };
 
 #endif

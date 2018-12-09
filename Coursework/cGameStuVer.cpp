@@ -61,24 +61,24 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		theTextureMgr->addTexture(textureName[tCount], texturesToUse[tCount]);
 	}
 	// Create textures for Game Dialogue (text)
-	fontList = { "digital", "spaceAge" };
-	fontsToUse = { "Fonts/digital-7.ttf", "Fonts/space age.ttf" };
+	fontList = { "amatic", "amaticBold" };
+	fontsToUse = { "Fonts/AmaticSC-Regular.ttf", "Fonts/Amatic-Bold.ttf" };
 	for (int fonts = 0; fonts < (int)fontList.size(); fonts++)
 	{
-		theFontMgr->addFont(fontList[fonts], fontsToUse[fonts], 36);
+		theFontMgr->addFont(fontList[fonts], fontsToUse[fonts], 48);
 	}
-	gameTextList = { "Cat", "Score : ", "Instructions: Use the spacebar to blast through the walls and earn points!" };
+	gameTextList = { "Angry Cats!", "Score : ", "Instructions: Use the spacebar to blast through the walls and earn points!" };
 	strScore = gameTextList[1];
 	strScore += to_string(theScore).c_str();
 
-	theTextureMgr->addTexture("Title", theFontMgr->getFont("spaceAge")->createTextTexture(theRenderer, gameTextList[0], textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
-	theTextureMgr->addTexture("theScore", theFontMgr->getFont("spaceAge")->createTextTexture(theRenderer, strScore.c_str(), textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
-	theTextureMgr->addTexture("instructions", theFontMgr->getFont("spaceAge")->createTextTexture(theRenderer, gameTextList[2], textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+	theTextureMgr->addTexture("Title", theFontMgr->getFont("amaticBold")->createTextTexture(theRenderer, gameTextList[0], textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+	theTextureMgr->addTexture("theScore", theFontMgr->getFont("amaticBold")->createTextTexture(theRenderer, strScore.c_str(), textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+	theTextureMgr->addTexture("instructions", theFontMgr->getFont("amaticBold")->createTextTexture(theRenderer, gameTextList[2], textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 
 	// Load game sounds
-	soundList = { "theme", "rocket", "explosion" };
-	soundTypes = { soundType::music, soundType::sfx, soundType::sfx };
-	soundsToUse = { "Audio/ispeakwaves__upbeat-funky-loop-electronic.mp3", "Audio/mattix__jet-swoosh-02.wav", "Audio/alancat__rockfall1b-edit.wav" };
+	soundList = { "theme", "rocket", "explosion", "meow" };
+	soundTypes = { soundType::music, soundType::sfx, soundType::sfx, soundType::sfx };
+	soundsToUse = { "Audio/ispeakwaves__upbeat-funky-loop-electronic.mp3", "Audio/mattix__jet-swoosh-02.wav", "Audio/alancat__rockfall1b-edit.wav", "Audio/inspectorj__cat-screaming-a.wav" };
 	for (int sounds = 0; sounds < (int)soundList.size(); sounds++)
 	{
 		theSoundMgr->add(soundList[sounds], soundsToUse[sounds], soundTypes[sounds]);
@@ -95,10 +95,13 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	thePlayer.setSpriteDimensions(theTextureMgr->getTexture("thePlayer")->getTWidth(), theTextureMgr->getTexture("thePlayer")->getTHeight());
 	thePlayer.setSpriteTranslation({ 50,50 });
 
+
+
 	theWall.setSpritePos({ 600, 497 });
 	theWall.setTexture(theTextureMgr->getTexture("theWall"));
 	theWall.setSpriteDimensions(theTextureMgr->getTexture("theWall")->getTWidth(), theTextureMgr->getTexture("theWall")->getTHeight());
 	theWall.canCollide = true;
+
 
 	theWallTwo.setSpritePos({ 700, 497 });
 	theWallTwo.setTexture(theTextureMgr->getTexture("wallTwo"));
@@ -141,8 +144,15 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
 	// Render updated score value
+	if (updateScore == true)
+	{
+		theTextureMgr->deleteTexture("theScore");
+		theTextureMgr->addTexture("theScore", theFontMgr->getFont("amaticBold")->createTextTexture(theRenderer, strScore.c_str(), textType::solid, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+		updateScore = false;
+	}
+
 	tempTextTexture = theTextureMgr->getTexture("theScore");
-	pos = { 750, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+	pos = { 850, 5, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 	scale = { 1, 1 };
 	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 
@@ -155,6 +165,7 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	// render the player and walls
 	thePlayer.render(theRenderer, &thePlayer.getSpriteDimensions(), &thePlayer.getSpritePos(), thePlayer.getSpriteRotAngle(), &thePlayer.getSpriteCentre(), thePlayer.getSpriteScale());
 	thePlayer.setBoundingRect();
+
 
 	theWall.render(theRenderer, &theWall.getSpriteDimensions(), &theWall.getSpritePos(), theWall.getSpriteRotAngle(), &theWall.getSpriteCentre(), theWall.getSpriteScale());
 	theWall.setBoundingRect();
@@ -191,6 +202,7 @@ void cGame::update(double deltaTime)
 		 wallPos = { theWall.getSpritePos().x, theWall.getSpritePos().y };
 		 wallPos.x = WINDOW_WIDTH;
 		 theWall.setSpritePos(wallPos);
+		 theWall.canCollide = true;
 	}
 
 	SDL_Point wallPosTwo = { theWallTwo.getSpritePos().x, theWallTwo.getSpritePos().y };
@@ -201,6 +213,7 @@ void cGame::update(double deltaTime)
 		wallPosTwo = { theWallTwo.getSpritePos().x, theWallTwo.getSpritePos().y };
 		wallPosTwo.x = WINDOW_WIDTH;
 		theWallTwo.setSpritePos(wallPosTwo);
+		theWallTwo.canCollide = true;
 	}
 
 	SDL_Point wallPosThree = { theWallThree.getSpritePos().x, theWallThree.getSpritePos().y };
@@ -211,12 +224,14 @@ void cGame::update(double deltaTime)
 		wallPosThree = { theWallThree.getSpritePos().x, theWallThree.getSpritePos().y };
 		wallPosThree.x = WINDOW_WIDTH;
 		theWallThree.setSpritePos(wallPosThree);
+		theWallThree.canCollide = true; 
 	}
 
 	//cout << spaceHeldDown << endl;
 	SDL_Point playerPos = { thePlayer.getSpritePos().x, thePlayer.getSpritePos().y };
 
-	if (spaceHeldDown) {
+	if (spaceHeldDown) 
+	{
 		thePlayer.setTexture(theTextureMgr->getTexture("catRocket"));
 		if (playerPos.x < (WINDOW_WIDTH - 100))
 		{
@@ -246,14 +261,18 @@ void cGame::update(double deltaTime)
 		{
 			theWall.canCollide = false;
 			cout << "Collision" << endl;
-			if (spaceHeldDown == true)
+  			if (spaceHeldDown == true)
 			{
-				theScore++;
+				theScore += 10;
+				strScore = gameTextList[1];
+				strScore += to_string(theScore).c_str();
+				updateScore = true;
 				theSoundMgr->getSnd("explosion")->play(0);
 			}
 			else
 			{
 				cout << "Damage" << endl;
+				theSoundMgr->getSnd("meow")->play(0);
 			}
 		}
 	}
@@ -266,12 +285,16 @@ void cGame::update(double deltaTime)
 			cout << "Collision" << endl;
 			if (spaceHeldDown == true)
 			{
-				theScore++;
+				theScore += 10;
+				strScore = gameTextList[1];
+				strScore += to_string(theScore).c_str();
+				updateScore = true;
 				theSoundMgr->getSnd("explosion")->play(0);
 			}
 			else
 			{
 				cout << "Damage" << endl;
+				theSoundMgr->getSnd("meow")->play(0);
 			}
 		}
 	}
@@ -285,12 +308,16 @@ void cGame::update(double deltaTime)
 			if (spaceHeldDown == true)
 			{
 				cout << "1 point" << endl;
-				theScore++;
+				theScore += 10;
+				strScore = gameTextList[1];
+				strScore += to_string(theScore).c_str();
+				updateScore = true;
 				theSoundMgr->getSnd("explosion")->play(0);
 			}
 			else
 			{
 				cout << "Damage" << endl;
+				theSoundMgr->getSnd("meow")->play(0);
 			}
 		}
 	}
@@ -303,6 +330,7 @@ void cGame::update(double deltaTime)
 bool cGame::getInput(bool theLoop)
 {
 	SDL_Event event;
+	bool playSound = true;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -313,49 +341,21 @@ bool cGame::getInput(bool theLoop)
 
 		switch (event.type)
 		{
-			/*
-			case SDL_MOUSEBUTTONDOWN:
-				switch (event.button.button)
-				{
-				case SDL_BUTTON_LEFT:
-				{
-				}
-				break;
-				case SDL_BUTTON_RIGHT:
-					break;
-				default:
-					break;
-				}
-				break;
-			case SDL_MOUSEBUTTONUP:
-				switch (event.button.button)
-				{
-				case SDL_BUTTON_LEFT:
-				{
-				}
-				break;
-				case SDL_BUTTON_RIGHT:
-					break;
-				default:
-					break;
-				}
-				break;
-			*/
+			
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym)
 				{
-					/*case SDLK_ESCAPE:
-						theLoop = false;
-						break;*/
+					
 
 				case SDLK_SPACE:
 					cout << "space down" << endl;
 					spaceHeldDown = true;
-					/*
-					thePlayer.setTexture(theTextureMgr->getTexture("catRocket"));
-					cout << "down" << endl;*/
-					cout << "sound played" << endl;
-					theSoundMgr->getSnd("rocket")->play(0);
+					if (playSound == true)
+					{
+						cout << "sound played" << endl;
+						theSoundMgr->getSnd("rocket")->play(0);
+						playSound = false;
+					}
 					break;
 
 
@@ -372,6 +372,7 @@ bool cGame::getInput(bool theLoop)
 						spaceHeldDown = false;
 						cout << "space up" << endl;
 						//xcout << "up" << endl;
+						
 						break;
 
 					default:
