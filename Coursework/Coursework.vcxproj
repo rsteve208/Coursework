@@ -159,6 +159,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="cSprite.h" />
     <ClInclude Include="cTexture.h" />
     <ClInclude Include="cTextureMgr.h" />
+    <ClInclude Include="cWall.h" />
     <ClInclude Include="GameConstants.h" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,7 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="cSprite.cpp" />
     <ClCompile Include="cTexture.cpp" />
     <ClCompile Include="cTextureMgr.cpp" />
+    <ClCompile Include="cWall.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

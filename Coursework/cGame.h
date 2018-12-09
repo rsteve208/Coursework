@@ -8,6 +8,7 @@ cGame.h
 */
 
 #include <SDL.h>
+#include "cWall.h"
 #include <random>
 // Game specific includes
 #include "angryCatGame.h"
@@ -29,6 +30,7 @@ public:
 	void update(double deltaTime);
 	bool getInput(bool theLoop);
 	double getElapsedSeconds();
+	bool loop;
 
 	static cGame* getInstance();
 
@@ -45,9 +47,9 @@ private:
 	cPlayer thePlayer;
 	cAngryCat theAsteroid;
 	cBullet theBullet;
-	cSprite theWall;
-	cSprite theWallTwo;
-	cSprite theWallThree;
+	cWall theWall;
+	cWall theWallTwo;
+	cWall theWallThree;
 	// game related variables
 	vector<LPCSTR> textureName;
 	vector<LPCSTR> textName;
@@ -69,6 +71,9 @@ private:
 	int renderWidth, renderHeight;
 	int theScore;
 	string strScore;
+
+	int theLives;
+	string strLives;
 
 	bool updateScore = false;
 	bool spaceHeldDown = false;
