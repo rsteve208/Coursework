@@ -204,7 +204,6 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 		
 		//Render the buttons
-		theButtonMgr->getBtn("replay")->setSpritePos({ 500, 500 });
 		theButtonMgr->getBtn("replay")->render(theRenderer, &theButtonMgr->getBtn("replay")->getSpriteDimensions(), &theButtonMgr->getBtn("replay")->getSpritePos(), theButtonMgr->getBtn("replay")->getSpriteScale());
 		theButtonMgr->getBtn("exit")->setSpritePos({ 500, 575 });
 		theButtonMgr->getBtn("exit")->render(theRenderer, &theButtonMgr->getBtn("exit")->getSpriteDimensions(), &theButtonMgr->getBtn("exit")->getSpritePos(), theButtonMgr->getBtn("exit")->getSpriteScale());
