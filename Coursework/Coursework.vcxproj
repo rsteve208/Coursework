@@ -146,9 +146,10 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="angryCatGame.h" />
+    <ClInclude Include="cButton.h" />
     <ClInclude Include="cAngryCat.h" />
     <ClInclude Include="cBkGround.h" />
-    <ClInclude Include="cBullet.h" />
+    <ClInclude Include="cButtonMgr.h" />
     <ClInclude Include="cFont.h" />
     <ClInclude Include="cFontMgr.h" />
     <ClInclude Include="cGame.h" />
@@ -163,13 +164,14 @@ xcopy /Y "SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="GameConstants.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AsteroidsSDL.cpp" />
+    <ClCompile Include="AngryCatSDL.cpp" />
+    <ClCompile Include="cButton.cpp" />
     <ClCompile Include="cAngryCat.cpp" />
     <ClCompile Include="cBkGround.cpp" />
-    <ClCompile Include="cBulletStuVer.cpp" />
+    <ClCompile Include="cButtonMgr.cpp" />
     <ClCompile Include="cFont.cpp" />
     <ClCompile Include="cFontMgr.cpp" />
-    <ClCompile Include="cGameStuVer.cpp" />
+    <ClCompile Include="cGameMain.cpp" />
     <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="cSDL2WNDManager.cpp" />
     <ClCompile Include="cSound.cpp" />

@@ -46,7 +46,6 @@ private:
 	cSprite spriteBkgd;
 	cPlayer thePlayer;
 	cAngryCat theAsteroid;
-	cBullet theBullet;
 	cWall theWall;
 	cWall theWallTwo;
 	cWall theWallThree;
@@ -55,7 +54,6 @@ private:
 	vector<LPCSTR> textName;
 	vector<LPCSTR> texturesToUse;
 	vector<cAngryCat*> theAsteroids;
-	vector<cBullet*> theBullets;
 	vector<cSprite*> theExplosions;
 	// Fonts to use
 	vector<LPCSTR> fontList;
@@ -66,15 +64,29 @@ private:
 	vector<LPCSTR> soundList;
 	vector<soundType> soundTypes;
 	vector<LPCSTR> soundsToUse;
+	// Create vector array of button textures
+	vector<LPCSTR> buttonNameList;
+	vector<LPCSTR> btnTexturesToUse;
+	vector<SDL_Point> btnPos;
+	vector <cButton> theButtons;
 	// Game objects
 	// Define the elements and there position in/on the array/map
 	int renderWidth, renderHeight;
+	gameState theGameState;
+	SDL_Point theAreaClicked;
+	btnTypes theBtnType;
+	SDL_Rect pos;
+	FPoint scale;
+	SDL_Rect aRect;
+	SDL_Color aColour;
+	cTexture* tempTextTexture;
+	// Define the score and lives
 	int theScore;
 	string strScore;
 
 	int theLives;
 	string strLives;
-
+	// Set the booleans for updating text
 	bool updateScore = false;
 	bool spaceHeldDown = false;
 	bool updateLives = false;
